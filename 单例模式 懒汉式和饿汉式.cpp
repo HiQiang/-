@@ -32,8 +32,9 @@ A* A::a = NULL;
 //懒汉式
 class Singleton_lazy {
 private:
-	Singleton_lazy(){}
-	static Singleton_lazy* getInstance() {
+	Singleton_lazy() { cout << "懒汉式构造函数" << endl; }
+public:
+	static Singleton_lazy* getInstance() { 
 		if (pSingleton == NULL)
 		{
 			pSingleton = new Singleton_lazy;
@@ -71,5 +72,8 @@ void test01()
 int main()
 {
 	cout<<"main函数开始执行！" << endl;
+
+	Singleton_lazy::getInstance();
+
 	return 0;
 }
