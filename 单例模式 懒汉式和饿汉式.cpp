@@ -13,10 +13,10 @@ using namespace std;
 
 
 
-class A 
+class A
 {
 private:
-	A(){
+	A() {
 		a = new A;
 	}
 public:
@@ -36,7 +36,7 @@ class Singleton_lazy {
 private:
 	Singleton_lazy() { cout << "懒汉式构造函数" << endl; }
 public:
-	static Singleton_lazy* getInstance() { 
+	static Singleton_lazy* getInstance() {
 		if (pSingleton == NULL)
 		{
 			pSingleton = new Singleton_lazy;
@@ -55,11 +55,28 @@ Singleton_lazy* Singleton_lazy::pSingleton = NULL;
 class Singleton_hungry {
 private:
 	Singleton_hungry() { cout << "饿汉式构造函数" << endl; }
+public:
 	static Singleton_hungry* getInstance() {
 		return pSingleton;
 	}
+	//static void freeSpace()
+	//{
+	//	if (pSingleton != NULL)
+	//	{
+	//		delete pSingleton;
+	//	}
+	//}
+	class Garbo {
+		~Garbo()
+		{
+			if (pSingleton != NULL) {
+				delete pSingleton;
+			}
+		}
+	};
 private:
 	static Singleton_hungry* pSingleton;
+	static Garbo garbo1;
 };
 
 //类外初始化
@@ -67,15 +84,43 @@ Singleton_hungry* Singleton_hungry::pSingleton = new Singleton_hungry;
 
 void test01()
 {
+	Singleton_lazy* p1 = Singleton_lazy::getInstance();
+	Singleton_lazy* p2 = Singleton_lazy::getInstance();
 
+	if (p1 == p2)
+	{
+		cout << "两个指针指向同一块内存" << endl;
+	}
+	else
+	{
+		cout << "不是单例" << endl;
+	}
+
+	Singleton_hungry* p3 = Singleton_hungry::getInstance();
+	Singleton_hungry* p4 = Singleton_hungry::getInstance();
+
+	if (p3 == p4)
+	{
+		cout << "两个指针指向同一块内存" << endl;
+	}
+	else
+	{
+		cout << "不是单例" << endl;
+	}
+
+
+}
+//单例对象释放问题
+void test02() {
+	//Singleton_hungry::freeSpace();
 }
 
 
 int main()
 {
-	cout<<"main函数开始执行！" << endl;
+	cout << "main函数开始执行！" << endl;
 
-	Singleton_lazy::getInstance();
+	test01();
 
 	return 0;
 }
